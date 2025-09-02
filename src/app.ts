@@ -44,9 +44,17 @@ const main = async () => {
         })
 
         // Event listeners
-        adapterProvider.on('auth_failure', () => {
+        adapterProvider.on('auth_failure', (error) => {
             console.log('❌ Fallo de autenticación WhatsApp')
-            connectionStatus = { isConnected: false, status: 'disconnected' }
+            console.log('⚡⚡ ERROR AUTH ⚡⚡')
+            console.log('Detalles del error:', error)
+            connectionStatus = { isConnected: false, status: 'error' }
+            
+            // Reintentar conexión después de 5 segundos
+            setTimeout(() => {
+                console.log('🔄 Reintentando conexión WhatsApp...')
+                connectionStatus = { isConnected: false, status: 'connecting' }
+            }, 5000)
         })
 
         adapterProvider.on('ready', () => {
@@ -62,6 +70,21 @@ const main = async () => {
         adapterProvider.on('pairing-code', (code: string) => {
             console.log(`📱 Código de pairing: ${code}`)
             console.log(`   Use este código en WhatsApp para conectar el número ${WHATSAPP_PHONE}`)
+            console.log(`⚡⚡ ACTION REQUIRED ⚡⚡`)
+            console.log(`Accept the WhatsApp notification from ${WHATSAPP_PHONE} on your phone 👌`)
+            console.log(`The token for linking is: ${code}`)
+        })
+
+        // Manejo de errores del proveedor
+        adapterProvider.on('error', (error) => {
+            console.error('❌ Error del proveedor WhatsApp:', error)
+            connectionStatus = { isConnected: false, status: 'error' }
+        })
+
+        // Manejo de desconexiones
+        adapterProvider.on('close', () => {
+            console.log('⚠️ Conexión WhatsApp cerrada')
+            connectionStatus = { isConnected: false, status: 'disconnected' }
         })
 
         const { handleCtx, httpServer } = await createBot({
