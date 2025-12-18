@@ -37,7 +37,7 @@ const main = async () => {
     const adapterFlow = createFlow([]); // Sin flows de chatbot
 
     const adapterProvider = createProvider(Provider, {
-      version: [2, 3000, 1030817285],
+      version: [2, 3000, 1030780948],
       experimentalStore: true,
       timeRelease: 10800000,
     });
