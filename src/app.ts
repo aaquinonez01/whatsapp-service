@@ -140,7 +140,7 @@ const main = async () => {
             );
           }
 
-          await bot.sendMessage(number, message, {});
+          await bot?.sendMessage(number, message, {});
 
           res.writeHead(200, { "Content-Type": "application/json" });
           return res.end(
