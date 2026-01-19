@@ -37,9 +37,10 @@ const main = async () => {
     const adapterFlow = createFlow([]); // Sin flows de chatbot
 
     const adapterProvider = createProvider(Provider, {
-      version: [2, 3000, 1030780948],
-      experimentalStore: true,
-      timeRelease: 10800000,
+      version: [2, 3000, 1032049861],
+      browser: ["Windows", "Chrome", "Chrome 114.0.5735.198"],
+      experimentalStore: true, // Significantly reduces resource consumption
+      timeRelease: 10800000,    // Cleans up data every 3 hours (in milliseconds)
     });
 
     // Event listeners
@@ -191,6 +192,7 @@ const main = async () => {
     console.log(`🚀 WhatsApp API ejecutándose en puerto ${PORT}`);
     console.log(`📊 Estado del servicio: http://localhost:${PORT}/status`);
   } catch (error) {
+
     console.error("❌ Error al iniciar la aplicación:", error);
     process.exit(1);
   }
