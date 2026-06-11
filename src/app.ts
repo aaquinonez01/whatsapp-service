@@ -37,10 +37,10 @@ const main = async () => {
     const adapterFlow = createFlow([]); // Sin flows de chatbot
 
     const adapterProvider = createProvider(Provider, {
-      version: [2, 3000, 1032049861],
+      version: [2, 3000, 1040367347],
       browser: ["Windows", "Chrome", "Chrome 114.0.5735.198"],
       experimentalStore: true, // Significantly reduces resource consumption
-      timeRelease: 10800000,    // Cleans up data every 3 hours (in milliseconds)
+      timeRelease: 10800000, // Cleans up data every 3 hours (in milliseconds)
     });
 
     // Event listeners
@@ -75,8 +75,8 @@ const main = async () => {
       console.log("💡 Si no puedes ver el QR, copia este enlace:");
       console.log(
         `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-          qr
-        )}`
+          qr,
+        )}`,
       );
       connectionStatus = { isConnected: false, status: "connecting" };
     });
@@ -110,7 +110,7 @@ const main = async () => {
             sendMessage: "POST /send-message",
             status: "GET /status",
           },
-        })
+        }),
       );
     });
 
@@ -126,7 +126,7 @@ const main = async () => {
             return res.end(
               JSON.stringify({
                 error: "Faltan campos: number y message son requeridos",
-              })
+              }),
             );
           }
 
@@ -136,7 +136,7 @@ const main = async () => {
               JSON.stringify({
                 error: "WhatsApp no está conectado",
                 status: "not_connected",
-              })
+              }),
             );
           }
 
@@ -148,7 +148,7 @@ const main = async () => {
               success: true,
               message: "✅ Mensaje enviado correctamente",
               to: number,
-            })
+            }),
           );
         } catch (error: any) {
           console.error("❌ Error al enviar mensaje:", error);
@@ -157,10 +157,10 @@ const main = async () => {
             JSON.stringify({
               error: "Error al enviar mensaje",
               details: error.message,
-            })
+            }),
           );
         }
-      })
+      }),
     );
 
     // Status endpoint
@@ -183,7 +183,7 @@ const main = async () => {
           JSON.stringify({
             error: "Error al obtener estado",
             details: error.message,
-          })
+          }),
         );
       }
     });
@@ -192,7 +192,6 @@ const main = async () => {
     console.log(`🚀 WhatsApp API ejecutándose en puerto ${PORT}`);
     console.log(`📊 Estado del servicio: http://localhost:${PORT}/status`);
   } catch (error) {
-
     console.error("❌ Error al iniciar la aplicación:", error);
     process.exit(1);
   }
