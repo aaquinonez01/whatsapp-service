@@ -37,7 +37,7 @@ const main = async () => {
     const adapterFlow = createFlow([]); // Sin flows de chatbot
 
     const adapterProvider = createProvider(Provider, {
-      version: [2, 3000, 1040367347],
+      version: [2, 3000, 1035194821],
       browser: ["Windows", "Chrome", "Chrome 114.0.5735.198"],
       experimentalStore: true, // Significantly reduces resource consumption
       timeRelease: 10800000, // Cleans up data every 3 hours (in milliseconds)
