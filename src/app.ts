@@ -8,6 +8,23 @@ config();
 const PORT = process.env.PORT ?? 3003;
 const WHATSAPP_PHONE = process.env.WHATSAPP_PHONE_NUMBER;
 
+// Versión de WhatsApp Web: https://wppconnect.io/whatsapp-versions
+const DEFAULT_WA_VERSION: [number, number, number] = [2, 3000, 1048136787];
+
+const parseWaVersion = (raw?: string): [number, number, number] => {
+  if (!raw) return DEFAULT_WA_VERSION;
+  const parts = raw.trim().replace(/-alpha$/, "").split(".").map(Number);
+  if (parts.length !== 3 || parts.some((n) => !Number.isInteger(n))) {
+    console.log(
+      `⚠️  WA_VERSION inválida ("${raw}"), usando ${DEFAULT_WA_VERSION.join(".")}`
+    );
+    return DEFAULT_WA_VERSION;
+  }
+  return parts as [number, number, number];
+};
+
+const WA_VERSION = parseWaVersion(process.env.WA_VERSION);
+
 interface ConnectionStatus {
   isConnected: boolean;
   status: "connected" | "connecting" | "disconnected" | "error";
@@ -25,6 +42,7 @@ const validateConfig = (): void => {
   console.log(`🔧 Configuration:`);
   console.log(`   - Port: ${PORT}`);
   console.log(`   - WhatsApp Phone: ${WHATSAPP_PHONE}`);
+  console.log(`   - WhatsApp Version: ${WA_VERSION.join(".")}`);
 };
 
 const main = async () => {
@@ -37,7 +55,7 @@ const main = async () => {
     const adapterFlow = createFlow([]); // Sin flows de chatbot
 
     const adapterProvider = createProvider(Provider, {
-      version: [2, 3000, 1045368834],
+      version: WA_VERSION,
       browser: ["Windows", "Chrome", "Chrome 114.0.5735.198"],
       experimentalStore: true, // Significantly reduces resource consumption
       timeRelease: 10800000, // Cleans up data every 3 hours (in milliseconds)
